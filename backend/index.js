@@ -6,6 +6,7 @@ import http from "http";
 import "dotenv/config";
 import { router as authRouter } from "./routes/authRoute.js";
 import router from "./routes/Route.js";
+import SocketHandler from "./SocketHandler.js";
 
 const PORT = process.env.PORT || 6000;
 
@@ -13,7 +14,7 @@ const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ limit: "30mb", extended: true }));
-// app.use(cors);
+app.use(cors);
 
 app.use("/", authRouter); // auth routes
 app.use("/", router); // post routes
@@ -24,22 +25,19 @@ app.get("/", (req, res) => {
 
 const server = http.createServer(app);
 
-// const io = new Server(server, {
-//   cors: {
-//     origin: "*",
-//     methods: ["GET", "POST", "PUT", "DELETE"],
-//   },
-// });
+const io = new Server(server, {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+  },
+});
 
-// io.on("connection", (socket) => {
-//   console.log(" User connected");
+io.on("connection", (socket) => {
+  console.log(" User connected");
 
-//   // send it to socket handler
-// });
-
-// server.listen(3000, () => {
-//   console.log("serveris running");
-// });
+  // send it to socket handler
+  SocketHandler(socket);
+});
 
 mongoose
   .connect("mongodb://localhost:27017/connect")

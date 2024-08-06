@@ -1,7 +1,7 @@
 import Post from "./models/Posts.js";
 import User from "./models/Users.js";
 import Chats from "./models/Chats.js";
-import Stories from "./models/Stories";
+import Stories from "./models/Stories.js";
 
 const SocketHandler = (socket) => {
   socket.on("postLiked", async ({ userId, postId }) => {
