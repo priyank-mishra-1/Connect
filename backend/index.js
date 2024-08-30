@@ -7,14 +7,17 @@ import "dotenv/config";
 import { router as authRouter } from "./routes/authRoute.js";
 import router from "./routes/Route.js";
 import SocketHandler from "./SocketHandler.js";
+import path from "path";
+import { fileURLToPath } from "url";
+import { createProxyMiddleware } from "http-proxy-middleware";
 
-const PORT = process.env.PORT || 6000;
+const PORT = process.env.PORT || 6001;
 
 const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ limit: "30mb", extended: true }));
-app.use(cors);
+app.use(cors());
 
 app.use("/", authRouter); // auth routes
 app.use("/", router); // post routes

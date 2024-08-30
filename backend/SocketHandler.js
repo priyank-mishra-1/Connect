@@ -31,7 +31,7 @@ const SocketHandler = (socket) => {
         { profilePic: profilePic, username: username, about: about }
       );
 
-      socket.emit("profile-fetched", { user });
+      socket.emit("fetch-profile", { user });
     }
   );
 
@@ -91,6 +91,7 @@ const SocketHandler = (socket) => {
       { _id: postId },
       { $push: { comments: [username, comment] } }
     );
+    socket.emit("commentUpdated");
   });
 
   socket.on("fetch-friends", async ({ userId }) => {
@@ -137,7 +138,7 @@ const SocketHandler = (socket) => {
       try {
         await Chats.findOneAndUpdate(
           { _id: chatId },
-          { $addToSet: { messages: { id, text, file, date } } },
+          { $addToSet: { messages: { id, text, file, senderId, date } } },
           { new: true }
         );
 
